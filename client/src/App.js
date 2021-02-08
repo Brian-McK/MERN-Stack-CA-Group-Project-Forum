@@ -13,8 +13,8 @@ export default class App extends Component {
 		return (
 			<div className="App">
 				<Header />
-				{/* <Login /> */}
-				<Home />
+				<Login />
+				{/* <Home /> */}
 				<Footer />
 			</div>
 		);
