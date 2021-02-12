@@ -30,7 +30,13 @@
    border-radius: 4px;
    border: none;
    outline:none;
+   background-color: #2B2D42;
+   color: white;
 }
+
+#bulletinModalBtn:hover {
+    background-color: #bdbdbd;
+ }
 
 .Topic {
     background-color: #8D99AE;
@@ -54,7 +60,7 @@
 
 .LoginFormWrapper {
     color: white;
-    background-color:  #D90429;;
+    background-color:  #D90429;
     border: 5px solid #2B2D42;
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
@@ -72,6 +78,38 @@
     align-items: center;
 }
 
+.AddTopicWrapper {
+    margin-top: 20px;
+    border-radius: 0;
+    border: 0;
+    background-color: #2B2D42;
+}
+
 .FormLabels {
     padding: 10px;
+}
+
+.formLabelsAlt {
+    margin: 0;
+    padding: 10px;
+}
+
+.formInputAlt {
+    width: 75%;
+}
+
+.labelSpacers {
+    margin-right: 20px;
+}
+
+.AddTopic {
+    width: 100%;
+}
+
+.AddTopic labels {
+    color: red;
+}
+
+.test {
+    border: 2px solid red;
 }

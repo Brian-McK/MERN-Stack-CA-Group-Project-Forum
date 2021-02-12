@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faSignInAlt, faKey } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faSignInAlt, faKey, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 const useStyles = makeStyles((theme) => ({
 	grid: {
@@ -15,29 +15,41 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-export default function LoginForm () {
+export default function SignupForm () {
+	const [ firstName, setFirstName ] = useState();
+	const [ surname, setSurname ] = useState();
 	const [ email, setEmail ] = useState();
 	const [ password, setPassword ] = useState();
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		alert(`Email: ${email} , Password: ${password}`);
+		alert(`firstName: ${firstName} , surname: ${surname} , email: ${email} , password: ${password}`);
 	};
 
 	const classes = useStyles();
 
 	return (
-		<div className="LoginForm">
-			This is My Login Form Component
+		<div className="SignupForm">
+			This is My Signup Form Component
 			<Grid container spacing={2} className={classes.grid}>
-				<Grid item xs={12} sm={12} md={4} lg={4} className="LoginFormInfoWrapper">
+				<Grid item xs={12} sm={12} md={4} lg={4} className="SignupFormInfoWrapper LoginFormInfoWrapper">
 					<h3>Hello & Welcome</h3>
 					<FontAwesomeIcon icon={faSignInAlt} size="4x" />
 				</Grid>
-				<Grid item xs={12} sm={12} md={8} lg={8} className="LoginFormWrapper">
+				<Grid item xs={12} sm={12} md={8} lg={8} className="SignupFormWrapper LoginFormWrapper">
 					<Paper square className={classes.paper} elevation={5}>
-						<h3>Please Log In</h3>
+						<h3>Please Signup</h3>
 						<form onSubmit={handleSubmit}>
+							<label className="FormLabels">
+								<FontAwesomeIcon icon={faUser} size="2x" />
+								<p>First Name</p>
+								<input type="text" onChange={(e) => setFirstName(e.target.value)} />
+							</label>
+							<label className="FormLabels">
+								<FontAwesomeIcon icon={faUser} size="2x" />
+								<p>Surname</p>
+								<input type="text" onChange={(e) => setSurname(e.target.value)} />
+							</label>
 							<label className="FormLabels">
 								<FontAwesomeIcon icon={faEnvelope} size="2x" />
 								<p>Email</p>
