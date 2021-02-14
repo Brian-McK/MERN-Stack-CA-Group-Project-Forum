@@ -28,24 +28,6 @@ export default function Topics() {
                             <Topic/>
                         </Paper>
                     </Grid>
-
-                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                        <Paper className={classes.paper} elevation={3}>
-                            <Topic/>
-                        </Paper>
-                    </Grid>
-
-                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                        <Paper className={classes.paper} elevation={3}>
-                            <Topic/>
-                        </Paper>
-                    </Grid>
-
-                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                        <Paper className={classes.paper} elevation={3}>
-                            <Topic/>
-                        </Paper>
-                    </Grid>
                 </Grid>
         </div>  
     );

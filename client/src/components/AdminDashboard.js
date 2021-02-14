@@ -9,6 +9,8 @@ import {
   faUserMinus,
 } from "@fortawesome/free-solid-svg-icons";
 import AddTopic from "./AddTopic";
+import EditTopic from "./EditTopic";
+import DeleteTopic from "./DeleteTopic";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -86,7 +88,9 @@ export default function AdminDashboard() {
           </Paper>
         </Grid>
         {/* SELECTED OPTION DIV BELOW WHEN THEY CLICK */}
-        <AddTopic />
+        {/* <AddTopic /> */}
+        {/* <EditTopic /> */}
+        <DeleteTopic />
       </Grid>
     </div>
   );
