@@ -3,7 +3,6 @@ import { Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserMinus } from "@fortawesome/free-solid-svg-icons";
-import Topics from "./Topics";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -16,15 +15,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// Edit topic
-// topic id (auto increment) (READ-ONLY)
-// topic name
-// topic description
-// topic creator (auto when admin) - (READ-ONLY)
-
 export default function DeleteTopic() {
   const [search, setSearch] = useState();
-
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -44,7 +36,7 @@ export default function DeleteTopic() {
           lg={3}
           className="AddTopicWrapper LoginFormInfoWrapper"
         >
-          <h3>Delete Topic</h3>
+          <h3>Delete User</h3>
           <FontAwesomeIcon icon={faUserMinus} size="4x" />
         </Grid>
         <Grid
@@ -60,7 +52,7 @@ export default function DeleteTopic() {
               <Grid container spacing={0} className={classes.grid}>
                 <Grid item xs={12} sm={12} md={4} lg={4}>
                   <label htmlFor="topicId" className="formLabelsAlt">
-                    Search For Topic
+                    Search For User
                   </label>
                 </Grid>
                 <Grid item xs={12} sm={12} md={8} lg={8}>
@@ -76,8 +68,6 @@ export default function DeleteTopic() {
                 </Grid>
               </Grid>
             </form>
-            {/* topics */}
-            <Topics/>
           </Paper>
         </Grid>
       </Grid>

@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react";
+import NavBar from './NavBar';
 
-function Header () {
-	return (
-		<div className="Header">
-			This is My Header Component
-			{/* add nav component in here */}
-		</div>
-	);
+function Header() {
+  return (
+    <div className="Header">
+	  <NavBar/>
+    </div>
+  );
 }
 
 export default Header;

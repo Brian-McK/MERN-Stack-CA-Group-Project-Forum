@@ -11,6 +11,7 @@ import {
 import AddTopic from "./AddTopic";
 import EditTopic from "./EditTopic";
 import DeleteTopic from "./DeleteTopic";
+import DeleteUser from "./DeleteUser";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -90,7 +91,8 @@ export default function AdminDashboard() {
         {/* SELECTED OPTION DIV BELOW WHEN THEY CLICK */}
         {/* <AddTopic /> */}
         {/* <EditTopic /> */}
-        <DeleteTopic />
+        {/* <DeleteTopic /> */}
+        {/* <DeleteUser /> */}
       </Grid>
     </div>
   );
