@@ -39,20 +39,10 @@
     color: white;
 }
 
-/* .Topic * { 
-    border: 2px solid yellow;
-} */
 
 .Footer {
     background-color: #D90429;
 }
-
-/* .Login {
-}
-
-.LoginForm {
-    
-} */
 
 .LoginFormWrapper {
     color: white;
@@ -108,4 +98,23 @@
 
 .test {
     border: 2px solid red;
+}
+
+.EnteredTopic {
+    color: white;
+    background-color: #2B2D42;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.TopicComment {
+    margin-top: 20px;
+    width: 60%;
+    background-color: white;
+    color: black;
+}
+
+.AddComment {
+    width: 60%;
 }
