@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -38,6 +38,36 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AdminDashboard() {
   const classes = useStyles();
+  const [visibleAddTopic, setVisibleAddTopic] = useState(true);
+  const [visibleEditTopic, setVisibleEditTopic] = useState(false);
+  const [visibleDeleteTopic, setVisibleDeleteTopic] = useState(false);
+  const [visibleDeleteUser, setVisibleDeleteUser] = useState(false);
+
+  // badly written code, fix later
+
+  function showHideAdminOptions(msg) {
+    if (msg === "addTopic") {
+      setVisibleAddTopic(true);
+      setVisibleEditTopic(false);
+      setVisibleDeleteTopic(false);
+      setVisibleDeleteUser(false);
+    } else if (msg === "editTopic") {
+      setVisibleEditTopic(true);
+      setVisibleAddTopic(false);
+      setVisibleDeleteTopic(false);
+      setVisibleDeleteUser(false);
+    } else if (msg === "deleteTopic") {
+      setVisibleDeleteTopic(true);
+      setVisibleEditTopic(false);
+      setVisibleAddTopic(false);
+      setVisibleDeleteUser(false);
+    } else if (msg === "deleteUser") {
+      setVisibleDeleteUser(true);
+      setVisibleDeleteTopic(false);
+      setVisibleEditTopic(false);
+      setVisibleAddTopic(false);
+    }
+  }
 
   return (
     <div className="AdminDashboard">
@@ -54,6 +84,7 @@ export default function AdminDashboard() {
               icon={faPlusCircle}
               size="3x"
               className={classes.flexItem}
+              onClick={() => showHideAdminOptions("addTopic")}
             />
             <span className={classes.flexItem}>ADD TOPIC</span>
           </Paper>
@@ -64,6 +95,7 @@ export default function AdminDashboard() {
               icon={faEdit}
               size="3x"
               className={classes.flexItem}
+              onClick={() => showHideAdminOptions("editTopic")}
             />
             <span className={classes.flexItem}>EDIT TOPIC</span>
           </Paper>
@@ -74,6 +106,7 @@ export default function AdminDashboard() {
               icon={faTrash}
               size="3x"
               className={classes.flexItem}
+              onClick={() => showHideAdminOptions("deleteTopic")}
             />
             <span className={classes.flexItem}>DELETE TOPIC</span>
           </Paper>
@@ -84,15 +117,16 @@ export default function AdminDashboard() {
               icon={faUserMinus}
               size="3x"
               className={classes.flexItem}
+              onClick={() => showHideAdminOptions("deleteUser")}
             />
             <span className={classes.flexItem}>DELETE USER</span>
           </Paper>
         </Grid>
         {/* SELECTED OPTION DIV BELOW WHEN THEY CLICK */}
-        {/* <AddTopic /> */}
-        {/* <EditTopic /> */}
-        {/* <DeleteTopic /> */}
-        {/* <DeleteUser /> */}
+        {visibleAddTopic ? <AddTopic /> : null}
+        {visibleEditTopic ? <EditTopic /> : null}
+        {visibleDeleteTopic ? <DeleteTopic /> : null}
+        {visibleDeleteUser ? <DeleteUser /> : null}
       </Grid>
     </div>
   );
