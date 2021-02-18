@@ -22,7 +22,7 @@ export default class App extends Component {
             <Route exact path="/Dashboard" component={Dashboard} />
             <Route exact path="/Signup" component={Signup} />
             <Route exact path="/Login" component={Login} />
-            <Route exact path="/EnteredTopic" component={EnteredTopic} />
+            <Route exact path="/EnteredTopic/:id" component={EnteredTopic} />
             <Route path="*" component={Home} />
           </Switch>
           {/* <Footer /> */}

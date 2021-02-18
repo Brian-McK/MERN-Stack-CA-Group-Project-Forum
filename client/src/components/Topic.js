@@ -3,7 +3,6 @@ import React from "react";
 import { Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
-import EnteredTopic from "./EnteredTopic";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -16,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Topic() {
+export default function Topic(props) {
   const classes = useStyles();
 
   return (
@@ -30,37 +29,37 @@ export default function Topic() {
       >
         <Grid item xs={2} sm={2} md={2} lg={1}>
           <Paper className={classes.paper} elevation={3}>
-            <TopicAvatar />
+            <TopicAvatar topicAvatar={props.topicAvatar}/>
           </Paper>
         </Grid>
 
         <Grid item xs={10} sm={10} md={3} lg={3}>
           <Paper className={classes.paper} elevation={3}>
-            Topic Name
+            Topic Name: {props.topicName}
           </Paper>
         </Grid>
 
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <Paper className={classes.paper} elevation={3}>
-            Topic Description
+          Topic Description: {props.topicDescription}
           </Paper>
         </Grid>
 
         <Grid item xs={4} sm={4} md={4} lg={4}>
           <Paper className={classes.paper} elevation={3}>
-            Topic Creator
+          Topic Author: {props.topicAuthor}
           </Paper>
         </Grid>
 
         <Grid item xs={4} sm={4} md={4} lg={4}>
           <Paper className={classes.paper} elevation={3}>
-            Number of posts
+          Number of Posts: {props.numberOfPosts}
           </Paper>
         </Grid>
 
         <Grid item xs={4} sm={4} md={4} lg={4}>
           <Paper className={classes.paper} elevation={3}>
-            <Link to="/EnteredTopic">
+            <Link to={"/EnteredTopic/" + props.topicId} >
               Enter Topic
               {/* here we will link using the topic id to a page that contains that specific topic */}
             </Link>

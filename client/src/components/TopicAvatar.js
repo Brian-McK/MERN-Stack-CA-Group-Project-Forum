@@ -16,12 +16,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ImageAvatars() {
+export default function ImageAvatars(props) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <Avatar alt="BR" 
+      <Avatar alt={props.topicAvatar} 
       src="/static/images/avatar/1.jpg" 
       className={classes.small}
       />
