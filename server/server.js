@@ -11,7 +11,7 @@ app.use(require("body-parser").json());
 app.use(require("cors")({ credentials: true, origin: process.env.LOCAL_HOST }));
 
 // Routers
-app.use(require("../server/routes/cars"));
+app.use(require("../server/routes/users"));
 app.use(require("../server/routes/bulletins"));
 app.use(require("../server/routes/topics"));
 
