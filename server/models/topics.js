@@ -1,21 +1,22 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-let commentsSchema = new mongoose.Schema({
-  topicCommentAuthor: { type: String, required: true },
-  topicComment: {type: String, required: true },
-  topicCommentDate: {type:Date, default:Date.now}
-});
-
-let topicsSchema = new mongoose.Schema(
+const topicsSchema = new Schema(
   {
     topicName: { type: String, required: true },
     topicDescription: { type: String, required: true },
-    topicAuthor: { type: String, required: true },
-    topicDate: {type: Date, default: Date.now},
-    topicComments: [commentsSchema]
+    topicAuthor: { type: String, default: "Admin" },
+    topicDate: { type: Date, default: Date.now },
+    topicComments: [{type: mongoose.Schema.Types.ObjectId, ref: 'topicComments'}]
   },
   {
     collection: "topics",
-  });
+  }
+);
 
 module.exports = mongoose.model("topics", topicsSchema);
+
+// {
+//   "topicName":"I LOVE FOOTBALL",
+//   "topicDescription":"FOR THE FOOTBALL LOVERS",
+// }

@@ -1,6 +1,67 @@
 const router = require("express").Router();
 
 const topicsModel = require("../models/topics");
+const topicCommentsModel = require("../models/topicComments");
+
+router.post("/topics/topic/:id/comments", async (req, res) => {
+  // find out which topic you are commenting
+  const topicId = req.params.id;
+  // get the comment text and topic reference
+  const comment = new topicCommentsModel({
+    topicCommentAuthor: req.body.topicCommentAuthor, 
+    topicComment: req.body.topicComment,
+    topicRef: topicId,
+  });
+  // save comment
+  await comment.save();
+  // get this particular topic
+  const topic = await topicsModel.findById(topicId);
+  // push the comment into the topicComments array
+  topic.topicComments.push(comment);
+  // save and redirect...
+  await topic.save(function (err) {
+    if (err) {
+      console.log(err);
+    }
+    res.redirect("/");
+  });
+});
+
+// Read one record
+// router.get("/topics/topic/:id/comments", (req, res) => {
+//   topicsModel.findById(req.params.id, (error, data) => {
+//     res.json(data);
+//   });
+// });
+
+
+// read all comments for a topic
+router.get("/topics/topic/:id/comments", (req, res) => {
+  topicCommentsModel.find({topicRef :req.params.id}, (error, data) => {
+    console.log(res.json.data);
+    res.json(data);
+  });
+});
+
+// I need to get all comments from a topic
+
+// try catch e.g
+// router.post("/topics/topic/:id/comments", async (req, res) => {
+//   const topicId = req.params.id;
+//   try {
+//   const comment = new topicCommentsModel({
+//     topicCommentAuthor: req.body.topicCommentAuthor, // added this in, was missing
+//     topicComment: req.body.topicComment,
+//     topicRef: topicId,
+//   });
+//     const saveComment = await comment.save();
+//     console.log(saveComment);
+//     const topic = await topicsModel.findById(topicId);
+//     topic.topicComments.push(comment);
+//   } catch (err) {
+//     console.log(err);
+//   }
+// });
 
 // read all records
 router.get("/topics/", (req, res) => {
@@ -10,7 +71,7 @@ router.get("/topics/", (req, res) => {
 });
 
 // Read one record
-router.get("/topics/get_topic/:id", (req, res) => {
+router.get("/topics/topic/:id", (req, res) => {
   topicsModel.findById(req.params.id, (error, data) => {
     res.json(data);
   });

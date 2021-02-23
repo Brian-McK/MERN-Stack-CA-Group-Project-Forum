@@ -10,36 +10,45 @@ const useStyles = makeStyles((theme) => ({
   },
   gridItemLeft: {
     backgroundColor: "red",
-    color: "white"
+    color: "white",
   },
   gridItemRight: {
-   border: "2px solid lightgray"
+    border: "2px solid lightgray",
   },
 }));
 
-export default function TopicComment() {
+export default function TopicComment(props) {
   const classes = useStyles();
 
   return (
     <div className="TopicComment">
-      <Grid
-        container
-        spacing={2}
-        justify="center"
-        className={classes.grid}
-      >
-          <Grid item xs={3} sm={3} md={3} lg={3} className={classes.gridItemLeft}>
+      <Grid container spacing={2} justify="center" className={classes.grid}>
+        <Grid item xs={3} sm={3} md={3} lg={3} className={classes.gridItemLeft}>
           Posted By:
-          User Name
-        </Grid>
-        
-        <Grid item xs={9} sm={9} md={9} lg={9} className={classes.gridItemRight}>
-          Hello, this is my topic comment
+          {props.topicCommentAuthor}
         </Grid>
 
-        <Grid item xs={12} sm={12} md={12} lg={12} className={classes.gridItemRight}>
-          Date / Time Posted:
-          11/12/2020
+        <Grid
+          item
+          xs={9}
+          sm={9}
+          md={9}
+          lg={9}
+          className={classes.gridItemRight}
+        >
+          {props.topicComment}
+        </Grid>
+
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={12}
+          lg={12}
+          className={classes.gridItemRight}
+        >
+          {props.topicCommentDate}
+          eee
         </Grid>
       </Grid>
     </div>

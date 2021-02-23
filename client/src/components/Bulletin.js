@@ -29,7 +29,6 @@ class Bulletin extends Component {
         } else {
           console.log("Records read");
           this.setState({ bulletins: res.data });
-          console.log(res.data);
         }
       } else {
         console.log("Record not found");
