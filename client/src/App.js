@@ -10,6 +10,15 @@ import Signup from "./components/Signup";
 import Dashboard from "./components/Dashboard";
 import EnteredTopic from "./components/EnteredTopic";
 
+import {ACCESS_LEVEL_GUEST} from "../config/global_constants"
+
+
+if (typeof sessionStorage.accessLevel === "undefined")
+{
+    sessionStorage.name = "GUEST"
+    sessionStorage.accessLevel = ACCESS_LEVEL_GUEST
+}
+
 export default class App extends Component {
   render() {
     return (
