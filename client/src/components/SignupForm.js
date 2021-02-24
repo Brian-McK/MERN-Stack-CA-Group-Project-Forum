@@ -1,11 +1,11 @@
 import React, { Component} from 'react';
 import { Grid, Paper } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSignInAlt, faKey, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import {SERVER_HOST} from "../config/global_constants"
 import axios from "axios"
-import {Redirect} from "react-router-dom"
+import {Redirect, Link} from "react-router-dom"
+import LinkInClass from "../components/LinkInClass"
 
 
 export default class SignupForm extends Component {
@@ -19,45 +19,55 @@ export default class SignupForm extends Component {
       password: "",
       isRegistered:false
     }
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
   }
   
-    handleSubmit(e){
-        e.preventDefault();
-        axios.post(`${SERVER_HOST}/users/register/${this.state.firstName}/${this.state.surname}/${this.state.email}/${this.state.password}`,{
-            users: {
-                firstName:this.state.firstName,
-                surname:this.state.surname,
-                email:this.state.email,
-                password:this.state.password
-            }
-        }, {withCredentials: true})
-        .then(res => 
-        {     
-            if(res.data)
-            {
-                if (res.data.errorMessage)
-                {
-                    console.log(res.data.errorMessage)    
-                }
-                else // user successfully logged in
-                { 
-                    console.log("User Registered")  
-                    this.setState({isRegistered:true})
-                }        
-            }
-            else
-            {
-                console.log("Registration failed")
-            }
-        })   
-    }
-    
-    handleChange(e) 
+    handleChange = (e) => 
     {
         this.setState({[e.target.name]: e.target.value})
     }
+    
+    handleSubmit = (e) =>
+    {
+        e.preventDefault();
+        axios.post(`${SERVER_HOST}/users/register/${this.state.firstName}/${this.state.surname}/${this.state.email}/${this.state.password}/`)
+            .then(res => 
+            {     
+                if(res.data)
+                {
+                    if (res.data.errorMessage)
+                    {
+                        console.log(this.state.firstName)
+                        console.log(res.data.errorMessage)    
+                    }
+                    else 
+                    { 
+                        this.setState({isRegistered:true})
+                        console.log("User Registered")                          
+                    }        
+                }
+                else
+                {
+                    console.log("Registration failed")
+                }
+            }) 
+ 
+        axios.get(`${SERVER_HOST}/users/`).then((res) => {
+        if (res.data) {
+        if (res.data.errorMessage) {
+          console.log(res.data.errorMessage);
+        } else {
+          console.log("Records read");
+          this.setState({ users: res.data });
+          console.log(res.data);
+        }
+      } else {
+        console.log("Record not found");
+      }
+    });
+    }
+    
+
+    
 
     render(){
       return (
@@ -72,7 +82,6 @@ export default class SignupForm extends Component {
                                 <Paper square elevation={5}>
                                         <h3>Please Signup</h3>
                                         <form onSubmit={this.handleSubmit}>
-                                        {this.state.isRegistered ? <Redirect to="/Home"/> : null} 
                                                 <label className="FormLabels">
                                                         <FontAwesomeIcon icon={faUser} size="2x" />
                                                         <p>First Name</p>
@@ -94,7 +103,9 @@ export default class SignupForm extends Component {
                                                         <input type="password" name="password" value={this.state.password} onChange={this.handleChange} />
                                                 </label>
                                                 <div>
-                                                        <button type="submit">Submit</button>
+                                                        <LinkInClass value="Register New User" className="green-button" onClick={this.handleSubmit} />
+                                                        {this.state.isRegistered ? <Redirect to="/"/> : null} 
+                                                        <Link className="red-button" to={"/Home"}>Cancel</Link>  
                                                 </div>
                                         </form>
                                 </Paper>
