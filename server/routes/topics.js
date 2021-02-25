@@ -38,30 +38,9 @@ router.post("/topics/topic/:id/comments", async (req, res) => {
 // read all comments for a topic
 router.get("/topics/topic/:id/comments", (req, res) => {
   topicCommentsModel.find({topicRef :req.params.id}, (error, data) => {
-    console.log(res.json.data);
     res.json(data);
   });
 });
-
-// I need to get all comments from a topic
-
-// try catch e.g
-// router.post("/topics/topic/:id/comments", async (req, res) => {
-//   const topicId = req.params.id;
-//   try {
-//   const comment = new topicCommentsModel({
-//     topicCommentAuthor: req.body.topicCommentAuthor, // added this in, was missing
-//     topicComment: req.body.topicComment,
-//     topicRef: topicId,
-//   });
-//     const saveComment = await comment.save();
-//     console.log(saveComment);
-//     const topic = await topicsModel.findById(topicId);
-//     topic.topicComments.push(comment);
-//   } catch (err) {
-//     console.log(err);
-//   }
-// });
 
 // read all records
 router.get("/topics/", (req, res) => {

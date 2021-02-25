@@ -22,7 +22,6 @@ export default function ImageAvatars(props) {
   return (
     <div className={classes.root}>
       <Avatar alt={props.topicAvatar} 
-      src="/static/images/avatar/1.jpg" 
       className={classes.small}
       />
     </div>

@@ -24,34 +24,38 @@ class EnteredTopic extends Component {
     super(props);
 
     this.state = {
-      topic: {}
+      topic: {},
+      comments: [],
     };
   }
 
   componentDidMount() {
-    // this.inputToFocus.focus(
-    axios
-      .get(`${SERVER_HOST}/topics/topic/60339a746f8120079f2ce802/comments`)
-      .then((res) => {
-        if (res.data) {
-          if (res.data.errorMessage) {
-            console.log(res.data.errorMessage);
-          } else {
-            console.log("Records read");
-            console.log(res.data)
-            this.setState({ topic: res.data});
-          }
-        } else {
-          console.log(`Record not found`);
-        }
-      });
+    Promise.all([
+      axios.get(`${SERVER_HOST}/topics/topic/${this.props.match.params.id}`),
+      axios.get(`${SERVER_HOST}/topics/topic/${this.props.match.params.id}/comments`) 
+    ])
+    .then(([topicRes, commentsRes]) => {
+      this.setState({topic : topicRes.data, comments : commentsRes.data});
+      console.log(this.state.topic);
+      console.log(this.state.comments);
+  });
   }
 
   render() {
     const { classes } = this.props;
-    const topic = this.state.topic;
 
-    // above needs to be fixed
+    console.log(this.props)
+
+    const comments = this.state.comments.map((comment) => {
+      return (
+        <TopicComment
+          key={comment._id}
+          topicCommentAuthor={comment.topicCommentAuthor}
+          topicComment={comment.topicComment}
+          topicCommentDate={comment.topicCommentDate}
+        />
+      );
+    });
 
     return (
       <div className="EnteredTopic">
@@ -65,38 +69,36 @@ class EnteredTopic extends Component {
         >
           <Grid item xs={2} sm={2} md={3} lg={3}>
             <Paper className={classes.paper} elevation={3}>
-              <TopicAvatar />
+              <TopicAvatar topicAvatar={"hi"}/>
             </Paper>
           </Grid>
 
           <Grid item xs={10} sm={10} md={9} lg={9}>
             <Paper className={classes.paper} elevation={3}>
-			    Topic Name: {topic.topicName}
+              Topic Name: {this.state.topic.topicName}
             </Paper>
           </Grid>
 
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Paper className={classes.paper} elevation={3}>
-			Topic Description: {topic.topicDescription}
+              Topic Description: {this.state.topic.topicDescription}
             </Paper>
           </Grid>
 
           <Grid item xs={6} sm={6} md={6} lg={6}>
             <Paper className={classes.paper} elevation={3}>
-			Topic Author: {topic.topicAuthor}
+              Topic Author: {this.state.topic.topicAuthor}
             </Paper>
           </Grid>
 
           <Grid item xs={6} sm={6} md={6} lg={6}>
             <Paper className={classes.paper} elevation={3}>
-			Number of Posts: {"N/A"}
+              Number of Posts: {"N/A"}
             </Paper>
           </Grid>
         </Grid>
-        {/* Topic Comments */}
-        <TopicComment topicCommentAuthor={"Comment Author"}/>
-        {/* Add Comments */}
-        <AddComment />
+        {comments}
+        <AddComment topicRef={this.state.topic._id}/>
       </div>
     );
   }

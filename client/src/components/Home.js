@@ -32,7 +32,6 @@ export default function Home() {
         <Grid item xs={12} sm={12} md={3} lg={3}>
           <Paper className={classes.paper} elevation={3}>
             <Bulletin />
-            {/* data table leaderboards? */}
           </Paper>
         </Grid>
       </Grid>

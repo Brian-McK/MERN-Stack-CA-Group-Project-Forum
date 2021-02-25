@@ -9,6 +9,7 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Dashboard from "./components/Dashboard";
 import EnteredTopic from "./components/EnteredTopic";
+import AddComment from "./components/AddComment";
 
 export default class App extends Component {
   render() {
