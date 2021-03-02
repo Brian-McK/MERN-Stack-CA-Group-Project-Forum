@@ -3,7 +3,6 @@ import axios from "axios";
 import { Grid, Paper } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { SERVER_HOST } from "../config/global_constants";
-import {Redirect, Link} from "react-router-dom"
 
 const useStyles = (theme) => ({
   grid: {
@@ -23,7 +22,7 @@ class AddComment extends Component {
 
     this.state = {
       topicComment: "",
-      refreshAfterSubmit: false
+      refreshAfterSubmit: false,
     };
   }
 
@@ -34,29 +33,32 @@ class AddComment extends Component {
   }
 
   handleSubmit = (e) => {
-    e.preventDefault();
-    alert(`topicComment: ${this.state.topicComment}`);
+    // e.preventDefault();
+    // alert(`topicComment: ${this.state.topicComment}`);
 
     // create commentObject to push through to db
+    // could add more stuff in here in future
     const commentObject = {
       topicComment: this.state.topicComment,
     };
 
     axios
-      .post(`${SERVER_HOST}/topics/topic/${this.props.topicRef}/comments`,commentObject)
+      .post(
+        `${SERVER_HOST}/topics/topic/${this.props.topicRef}/comments`,
+        commentObject
+      )
       .then((res) => {
         if (res.data) {
           if (res.data.errorMessage) {
             console.log(res.data.errorMessage);
           } else {
             console.log("Record added");
+            this.setState({ refreshAfterSubmit: true });
           }
         } else {
           console.log("Record not added");
         }
       });
-
-      
 
     // reset state
     this.setState({ topicComment: "" });
@@ -64,8 +66,6 @@ class AddComment extends Component {
 
   render() {
     const { classes } = this.props;
-
-    console.log(this.props)
 
     return (
       <div className="AddComment">

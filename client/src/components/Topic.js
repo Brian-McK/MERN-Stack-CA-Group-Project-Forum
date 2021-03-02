@@ -61,7 +61,6 @@ export default function Topic(props) {
           <Paper className={classes.paper} elevation={3}>
             <Link to={"/EnteredTopic/" + props.topicId} >
               Enter Topic
-              {/* here we will link using the topic id to a page that contains that specific topic */}
             </Link>
           </Paper>
         </Grid>

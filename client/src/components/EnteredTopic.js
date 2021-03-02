@@ -36,15 +36,14 @@ class EnteredTopic extends Component {
     ])
     .then(([topicRes, commentsRes]) => {
       this.setState({topic : topicRes.data, comments : commentsRes.data});
-      console.log(this.state.topic);
-      console.log(this.state.comments);
+
+      console.log();
   });
   }
 
   render() {
     const { classes } = this.props;
-
-    console.log(this.props)
+    const avatarLetter = this.state.topic.topicName;
 
     const comments = this.state.comments.map((comment) => {
       return (
@@ -69,7 +68,7 @@ class EnteredTopic extends Component {
         >
           <Grid item xs={2} sm={2} md={3} lg={3}>
             <Paper className={classes.paper} elevation={3}>
-              <TopicAvatar topicAvatar={"hi"}/>
+              <TopicAvatar topicAvatar={avatarLetter}/>
             </Paper>
           </Grid>
 

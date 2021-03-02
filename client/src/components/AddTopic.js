@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
 import { Grid, Paper } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { withStyles } from "@material-ui/core/styles";
+import { SERVER_HOST } from "../config/global_constants";
+import axios from "axios";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = (theme) => ({
   grid: {
     width: "100%",
     margin: "0 auto",
@@ -13,112 +15,143 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     textAlign: "center",
   },
-}));
+});
 
-// topic id (auto increment)
-// topic name
-// topic description
-// topic creator (auto when admin)
+class AddTopic extends Component {
+  constructor(props) {
+    super(props);
 
-export default function AddTopic() {
-  const [topicId, setTopicId] = useState();
-  const [topicName, setTopicName] = useState();
-  const [topicDesc, setTopicDesc] = useState();
-  const [topicCreator, setTopicCreator] = useState();
+    this.state = {
+      topicName: "",
+      topicDescription: "",
+      topicCreator: "",
+    };
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert(
-      `topicId: ${topicId} , topicName: ${topicName} , topicDesc: ${topicDesc} , topicCreator: ${topicCreator}`
-    );
+  handleChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  handleSubmit = (e) => {
+    // e.preventDefault();
+
+    const topicObject = {
+      topicName: this.state.topicName,
+      topicDescription: this.state.topicDescription,
+      topicCreator: this.state.topicCreator,
+    };
+
+    axios
+      .post(
+        `${SERVER_HOST}/topics/`,
+        topicObject
+      )
+      .then((res) => {
+        if (res.data) {
+          if (res.data.errorMessage) {
+            console.log(res.data.errorMessage);
+          } else {
+            console.log("Record added");
+          }
+        } else {
+          console.log("Record not added");
+        }
+      });
+
+    // reset state
+    this.setState({ topicName: "", topicDescription: "", topicCreator: "" });
   };
 
-  const classes = useStyles();
+  render() {
+    const { classes } = this.props;
 
-  return (
-    <div className="AddTopic">
-      <Grid container spacing={2} className={classes.grid}>
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={3}
-          lg={3}
-          className="AddTopicWrapper LoginFormInfoWrapper"
-        >
-          <h3>Add Topic</h3>
-          <FontAwesomeIcon icon={faPlusCircle} size="4x" />
+    return (
+      <div className="AddTopic">
+        <Grid container spacing={2} className={classes.grid}>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={3}
+            lg={3}
+            className="AddTopicWrapper LoginFormInfoWrapper"
+          >
+            <h3>Add Topic</h3>
+            <FontAwesomeIcon icon={faPlusCircle} size="4x" />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={9}
+            lg={9}
+            className="AddTopicWrapper LoginFormWrapper"
+          >
+            <Paper square className={classes.paper} elevation={5}>
+              <form onSubmit={this.handleSubmit}>
+                <Grid container spacing={0} className={classes.grid}>
+                  <Grid item xs={12} sm={12} md={4} lg={4}>
+                    <label htmlFor="topicId" className="formLabelsAlt">
+                      Topic Name
+                    </label>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={8} lg={8}>
+                    <input
+                      className="formInputAlt"
+                      id="topicName"
+                      name="topicName"
+                      type="text"
+                      value={this.state.topicName}
+                      onChange={(e) => this.handleChange(e)}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={12} md={4} lg={4}>
+                    <label htmlFor="topicDesc" className="formLabelsAlt">
+                      Topic Description
+                    </label>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={8} lg={8}>
+                    <input
+                      className="formInputAlt"
+                      id="topicDesc"
+                      name="topicDescription"
+                      type="text"
+                      value={this.state.topicDesc}
+                      onChange={(e) => this.handleChange(e)}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={12} md={4} lg={4}>
+                    <label htmlFor="topicCreator" className="formLabelsAlt">
+                      Topic Creator
+                    </label>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={8} lg={8}>
+                    <input
+                      className="formInputAlt"
+                      id="topicCreator"
+                      type="text"
+                      name="topicCreator"
+                      value={this.state.topicCreator}
+                      onChange={(e) => this.handleChange(e)}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
+                    <button type="submit" onSubmit={this.handleSubmit}>
+                      Add
+                    </button>
+                  </Grid>
+                </Grid>
+              </form>
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={9}
-          lg={9}
-          className="AddTopicWrapper LoginFormWrapper"
-        >
-          <Paper square className={classes.paper} elevation={5}>
-            <form onSubmit={handleSubmit}>
-              <Grid container spacing={0} className={classes.grid}>
-                <Grid item xs={12} sm={12} md={4} lg={4} >
-                  <label htmlFor="topicId" className="formLabelsAlt">
-                    Topic Id
-                  </label>
-                </Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8} >
-                  <input className="formInputAlt"
-                    id="topicId"
-                    type="text"
-                    onChange={(e) => setTopicId(e.target.value)}
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={12} md={4} lg={4} >
-                  <label htmlFor="topicId" className="formLabelsAlt">
-                    Topic Name
-                  </label>
-                </Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8} >
-                  <input className="formInputAlt"
-                    id="topicName"
-                    type="text"
-                    onChange={(e) => setTopicName(e.target.value)}
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={12} md={4} lg={4} >
-                  <label htmlFor="topicDesc" className="formLabelsAlt">
-                    Topic Description
-                  </label>
-                </Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8} >
-                  <input className="formInputAlt"
-                    id="topicDesc"
-                    type="text"
-                    onChange={(e) => setTopicDesc(e.target.value)}
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={12} md={4} lg={4} >
-                  <label htmlFor="topicCreator" className="formLabelsAlt">
-                    Topic Creator
-                  </label>
-                </Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8} >
-                  <input className="formInputAlt"
-                    id="topicCreator"
-                    type="text"
-                    onChange={(e) => setTopicCreator(e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={12} >
-                  <button type="submit">Add</button>
-                </Grid>
-              </Grid>
-            </form>
-          </Paper>
-        </Grid>
-      </Grid>
-    </div>
-  );
+      </div>
+    );
+  }
 }
+
+export default withStyles(useStyles)(AddTopic);

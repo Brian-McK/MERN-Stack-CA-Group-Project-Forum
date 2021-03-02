@@ -3,29 +3,39 @@ const router = require("express").Router();
 const topicsModel = require("../models/topics");
 const topicCommentsModel = require("../models/topicComments");
 
-router.post("/topics/topic/:id/comments", async (req, res) => {
-  // find out which topic you are commenting
+// push a comment to an array in a specific topic, and create a new comment in the comments table
+router.post("/topics/topic/:id/comments", (req, res) => {
+  // get topic id
   const topicId = req.params.id;
-  // get the comment text and topic reference
-  const comment = new topicCommentsModel({
-    topicCommentAuthor: req.body.topicCommentAuthor, 
-    topicComment: req.body.topicComment,
+  // create a comment
+  const newComment = new topicCommentsModel({
     topicRef: topicId,
+    topicCommentAuthor: req.body.topicCommentAuthor,
+    topicComment: req.body.topicComment,
   });
-  // save comment
-  await comment.save();
-  // get this particular topic
-  const topic = await topicsModel.findById(topicId);
-  // push the comment into the topicComments array
-  topic.topicComments.push(comment);
-  // save and redirect...
-  await topic.save(function (err) {
-    if (err) {
-      console.log(err);
+  // save the comment to the topicComments collection
+  newComment.save();
+  // find topic by the id and push the comments into the topicComments array
+  topicsModel.findByIdAndUpdate(
+    topicId,
+    { $push: { topicComments: newComment } },
+    (error, data) => {
+      res.json(data);
     }
-    res.redirect("/");
-  });
+  );
 });
+
+// // find topic and update author
+// router.put("/topics/topic/:id/", (req, res) => {
+//   // get topic id
+//   const topicId = req.params.id;
+//   topicsModel.findByIdAndUpdate(
+//     topicId,
+//     { $set:{topicAuthor: "David"}},
+//     (error, data) => {
+//     res.json(data);
+//     });
+// });
 
 // Read one record
 // router.get("/topics/topic/:id/comments", (req, res) => {
@@ -34,10 +44,9 @@ router.post("/topics/topic/:id/comments", async (req, res) => {
 //   });
 // });
 
-
 // read all comments for a topic
 router.get("/topics/topic/:id/comments", (req, res) => {
-  topicCommentsModel.find({topicRef :req.params.id}, (error, data) => {
+  topicCommentsModel.find({ topicRef: req.params.id }, (error, data) => {
     res.json(data);
   });
 });
@@ -56,14 +65,14 @@ router.get("/topics/topic/:id", (req, res) => {
   });
 });
 
-// Add new record
+// Add new topic
 router.post("/topics/", (req, res) => {
   topicsModel.create(req.body, (error, data) => {
     res.json(data);
   });
 });
 
-// Update one record
+// Update one topic
 router.put("/topics/:id", (req, res) => {
   topicsModel.findByIdAndUpdate(
     req.params.id,
@@ -74,7 +83,7 @@ router.put("/topics/:id", (req, res) => {
   );
 });
 
-// Delete one record
+// Delete one topic
 router.delete(`/topics/:id`, (req, res) => {
   topicsModel.findByIdAndRemove(req.params.id, (error, data) => {
     res.json(data);

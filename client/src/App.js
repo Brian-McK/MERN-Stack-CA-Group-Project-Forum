@@ -4,12 +4,10 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./css/App.css";
 import Home from "./components/Home";
 import Header from "./components/Header";
-import Footer from "./components/Footer";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Dashboard from "./components/Dashboard";
 import EnteredTopic from "./components/EnteredTopic";
-import AddComment from "./components/AddComment";
 
 export default class App extends Component {
   render() {
