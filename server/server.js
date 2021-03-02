@@ -33,3 +33,10 @@ app.use(function (err, req, res, next) {
   }
   res.status(err.statusCode).send(err.message);
 });
+
+app.use(require(`express-session`)({
+    secret: process.env.SESSION_PRIVATE_KEY,
+    resave: false,
+    cookie: {secure: false, maxAge: 60000}, 
+    saveUninitialized: true
+}));
