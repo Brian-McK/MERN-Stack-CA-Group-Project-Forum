@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Grid, Paper } from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserMinus } from "@fortawesome/free-solid-svg-icons";
-import Topics from "./Topics";
 import { withStyles } from "@material-ui/core/styles";
 import { SERVER_HOST } from "../config/global_constants";
 import axios from "axios";
@@ -24,7 +23,24 @@ class DeleteTopic extends Component {
 
     this.state = {
       searchForTopic: "",
+      topics: {},
     };
+  }
+
+  componentDidMount() {
+    axios.get(`${SERVER_HOST}/topics/`).then((res) => {
+      if (res.data) {
+        if (res.data.errorMessage) {
+          console.log(res.data.errorMessage);
+        } else {
+          console.log("Records read");
+          this.setState({ topics: res.data });
+          console.log(this.state.topics);
+        }
+      } else {
+        console.log("Record not found");
+      }
+    });
   }
 
   handleChange(e) {
@@ -33,27 +49,35 @@ class DeleteTopic extends Component {
     });
   }
 
-  handleSubmit = (e) => {
+  handleDelete = (e) => {
     e.preventDefault();
 
-    // axios
-    //   .post(
-    //     `${SERVER_HOST}/topics/`,
-    //     topicObject
-    //   )
-    //   .then((res) => {
-    //     if (res.data) {
-    //       if (res.data.errorMessage) {
-    //         console.log(res.data.errorMessage);
-    //       } else {
-    //         console.log("Record added");
-    //       }
-    //     } else {
-    //       console.log("Record not added");
-    //     }
-    //   });
+    const foundTopic = this.state.topics.find(
+      (topic) => topic.topicName === this.state.searchForTopic
+    );
 
-    // reset state
+    if (foundTopic) {
+      // axios delete
+      axios.delete(`${SERVER_HOST}/topics/${foundTopic._id}`).then((res) => {
+        if (res.data) {
+          if (res.data.errorMessage) {
+            console.log(res.data.errorMessage);
+            alert("ERROR");
+          } // success
+          else {
+            console.log("Record deleted");
+            alert("RECORD DELETED");
+          }
+        } else {
+          console.log("Record not deleted");
+        }
+      });
+    } else {
+      // didnt delete
+      console.log("no");
+    }
+
+    // reset state / reset topic to be deleted
     this.setState({ searchForTopic: "" });
   };
 
@@ -83,7 +107,7 @@ class DeleteTopic extends Component {
             className="AddTopicWrapper LoginFormWrapper"
           >
             <Paper square className={classes.paper} elevation={5}>
-              <form onSubmit={this.handleSubmit}>
+              <form onSubmit={this.handleDelete}>
                 <Grid container spacing={0} className={classes.grid}>
                   <Grid item xs={12} sm={12} md={4} lg={4}>
                     <label htmlFor="topicId" className="formLabelsAlt">
@@ -101,13 +125,10 @@ class DeleteTopic extends Component {
                     />
                   </Grid>
                   <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <button type="submit">Search</button>
+                    <button type="submit">Delete</button>
                   </Grid>
                 </Grid>
-              </form> 
-
-              {/* get back topic that we search for */}
-              {/* <Topics /> */}
+              </form>
             </Paper>
           </Grid>
         </Grid>

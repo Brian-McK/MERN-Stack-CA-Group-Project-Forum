@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 
 router.get("/users/", (req, res) => {
   usersModel.find((error, data) => {
-    res.json(data);
+    return res.json(data);
   });
 });
 
@@ -20,16 +20,18 @@ router.post(`/users/register/:firstName/:surname/:email/:password/`, (req, res) 
             
         } else
         {
-            usersModel.create({firstName: req.params.firstName,surname: req.params.surname,email: req.params.email,password: req.params.password}, (error, data) =>
+            bcrypt.hash(req.params.password, parseInt(process.env.PASSWORD_HASH_SALT_LENGTH),(err,hash) =>
             {
-                if (data)
+                usersModel.create({firstName: req.params.firstName,surname: req.params.surname,email: req.params.email,password: hash}, (error, data) =>
                 {
-                    res.json({firstName: data.firstName})
-                    res.json({isRegistered: true})
-                } else
-                {
-                    res.json({errorMessage: `User was not registered`})  
-                }
+                    if (data)
+                    {
+                        return res.json({firstName: data.firstName, isRegistered: true})
+                    } else
+                    {
+                        res.json({errorMessage: `User was not registered`})  
+                    }
+                })
             })
         }
     })
@@ -46,7 +48,6 @@ router.post(`/users/login/:email/:password`, (req,res) =>
                 if(result)
                 {
                     res.json({firstName: data.firstName, isLoggedIn: true})
-                    console.log(data.isLoggedIn)
                 }
                 else
                 {
@@ -62,10 +63,19 @@ router.post(`/users/login/:email/:password`, (req,res) =>
     })
 })
 
+// Delete one record
+router.delete(`/users/delete_user/:id`, (req, res) => 
+{
+    usersModel.findByIdAndRemove(req.params.id, (error, data) => 
+    {
+        res.json(data)
+    })       
+})
+
 
 router.post(`/users/logout`, (req,res) => 
 {       
-    res.json({isLoggedIn: false})
+    res.json({})
 })
 
 

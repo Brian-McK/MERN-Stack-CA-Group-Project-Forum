@@ -1,14 +1,27 @@
 import React, { Component} from 'react';
 import { Grid, Paper } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSignInAlt, faKey, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import {SERVER_HOST} from "../config/global_constants"
 import axios from "axios"
 import {Redirect, Link} from "react-router-dom"
 import LinkInClass from "../components/LinkInClass"
+import { withStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+	grid: {
+		width: '100%',
+		margin: '0 auto'
+	},
+	paper: {
+		padding: theme.spacing(1),
+		textAlign: 'center'
+	}
+}));
 
 
-export default class SignupForm extends Component {
+class SignupForm extends Component {
   constructor(props) {
     super(props);
 
@@ -28,7 +41,6 @@ export default class SignupForm extends Component {
     
     handleSubmit = (e) =>
     {
-        e.preventDefault();
         axios.post(`${SERVER_HOST}/users/register/${this.state.firstName}/${this.state.surname}/${this.state.email}/${this.state.password}/`)
             .then(res => 
             {     
@@ -70,16 +82,17 @@ export default class SignupForm extends Component {
     
 
     render(){
+      const { classes } = this.props;
       return (
         <div className="SignupForm">
                 This is My Signup Form Component
-                <Grid container spacing={2}>
+                <Grid container spacing={2} className={classes.grid}>
                         <Grid item xs={12} sm={12} md={4} lg={4} className="SignupFormInfoWrapper LoginFormInfoWrapper">
                                 <h3>Hello & Welcome</h3>
                                 <FontAwesomeIcon icon={faSignInAlt} size="4x" />
                         </Grid>
                         <Grid item xs={12} sm={12} md={8} lg={8} className="SignupFormWrapper LoginFormWrapper">
-                                <Paper square elevation={5}>
+                                <Paper square elevation={5} className={classes.paper}>
                                         <h3>Please Signup</h3>
                                         <form onSubmit={this.handleSubmit}>
                                                 <label className="FormLabels">
@@ -104,8 +117,8 @@ export default class SignupForm extends Component {
                                                 </label>
                                                 <div>
                                                         <LinkInClass value="Register New User" className="green-button" onClick={this.handleSubmit} />
-                                                        {this.state.isRegistered ? <Redirect to="/"/> : null} 
-                                                        <Link className="red-button" to={"/Home"}>Cancel</Link>  
+                                                        {this.state.isRegistered ? <Redirect to="/Login"/> : null} 
+                                                        <Link className="red-button" to={"/"}>Cancel</Link>  
                                                 </div>
                                         </form>
                                 </Paper>
@@ -115,3 +128,4 @@ export default class SignupForm extends Component {
     );
   }
 }
+export default withStyles(useStyles)(SignupForm);
