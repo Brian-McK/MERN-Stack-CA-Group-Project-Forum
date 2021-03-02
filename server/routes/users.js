@@ -63,6 +63,15 @@ router.post(`/users/login/:email/:password`, (req,res) =>
     })
 })
 
+// Delete one record
+router.delete(`/users/delete_user/:email`, (req, res) => 
+{
+    usersModel.findByIdAndRemove(req.params.email, (error, data) => 
+    {
+        res.json(data)
+    })       
+})
+
 
 router.post(`/users/logout`, (req,res) => 
 {       
