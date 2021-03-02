@@ -1,7 +1,7 @@
 const router = require(`express`).Router()
 
 const usersModel = require(`../models/users`)
-
+const bcrypt = require('bcryptjs'); 
 
 router.get("/users/", (req, res) => {
   usersModel.find((error, data) => {
@@ -34,6 +34,40 @@ router.post(`/users/register/:firstName/:surname/:email/:password/`, (req, res) 
         }
     })
 })
+
+router.post(`/users/login/:email/:password`, (req,res) => 
+{
+    usersModel.findOne({email:req.params.email}, (error, data) => 
+    {
+        if(data)
+        {
+            bcrypt.compare(req.params.password, data.password, (err, result) =>
+            {
+                if(result)
+                {
+                    res.json({firstName: data.firstName, isLoggedIn: true})
+                    console.log(data.isLoggedIn)
+                }
+                else
+                {
+                    res.json({errorMessage:`User is not logged in`})
+                }
+            })
+        }
+        else
+        {
+            console.log("not found in db")
+            res.json({errorMessage:`User is not logged in`})
+        } 
+    })
+})
+
+
+router.post(`/users/logout`, (req,res) => 
+{       
+    res.json({isLoggedIn: false})
+})
+
 
 module.exports = router
 
