@@ -1,15 +1,29 @@
 
+
 import React, { Component} from 'react';
 import { Grid, Paper } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSignInAlt, faKey, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import {SERVER_HOST} from "../config/global_constants"
 import axios from "axios"
 import {Redirect, Link} from "react-router-dom"
 import LinkInClass from "../components/LinkInClass"
+import { withStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+	grid: {
+		width: '100%',
+		margin: '0 auto'
+	},
+	paper: {
+		padding: theme.spacing(1),
+		textAlign: 'center'
+	}
+}));
 
 
-export default class LoginForm extends Component {
+class LoginForm extends Component {
   constructor(props) {
     super(props);
 
@@ -51,16 +65,17 @@ export default class LoginForm extends Component {
     
 
     render(){
+      const { classes } = this.props;
       return (
 		<div className="LoginForm">
 			This is My Login Form Component
-			<Grid container spacing={2}>
+			<Grid container spacing={2} className={classes.grid}>
 				<Grid item xs={12} sm={12} md={4} lg={4} className="LoginFormInfoWrapper">
 					<h3>Hello & Welcome</h3>
 					<FontAwesomeIcon icon={faSignInAlt} size="4x" />
 				</Grid>
 				<Grid item xs={12} sm={12} md={8} lg={8} className="LoginFormWrapper">
-					<Paper square elevation={5}>
+					<Paper square elevation={5} className={classes.paper}>
 						<h3>Please Log In</h3>
 						<form onSubmit={this.handleSubmit}>
 							<label className="FormLabels">
@@ -86,5 +101,4 @@ export default class LoginForm extends Component {
 	);
   }
 }
-
-
+export default withStyles(useStyles)(LoginForm);
