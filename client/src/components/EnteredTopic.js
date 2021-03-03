@@ -97,7 +97,10 @@ class EnteredTopic extends Component {
           </Grid>
         </Grid>
         {comments}
-        <AddComment topicRef={this.state.topic._id}/>
+        {sessionStorage.accessLevel >= ACCESS_LEVEL_GUEST ?
+          null
+          :
+        <AddComment topicRef={this.state.topic._id}/>}
       </div>
     );
   }
