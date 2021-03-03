@@ -6,6 +6,7 @@ import AddComment from "./AddComment";
 import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { SERVER_HOST } from "../config/global_constants";
+import {ACCESS_LEVEL_GUEST} from "../config/global_constants";
 
 const useStyles = (theme) => ({
   grid: {
