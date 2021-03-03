@@ -111,7 +111,7 @@ class DeleteTopic extends Component {
                 <Grid container spacing={0} className={classes.grid}>
                   <Grid item xs={12} sm={12} md={4} lg={4}>
                     <label htmlFor="topicId" className="formLabelsAlt">
-                      Search For Topic
+                      Search For Topic by name
                     </label>
                   </Grid>
                   <Grid item xs={12} sm={12} md={8} lg={8}>

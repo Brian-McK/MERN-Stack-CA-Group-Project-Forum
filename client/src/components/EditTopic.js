@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
 import { Grid, Paper } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { SERVER_HOST } from "../config/global_constants";
+import axios from "axios";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = (theme) => ({
   grid: {
     width: "100%",
     margin: "0 auto",
@@ -13,144 +15,189 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     textAlign: "center",
   },
-}));
+});
 
 // Edit topic
-// topic id (auto increment) (READ-ONLY)
 // topic name
 // topic description
 // topic creator (auto when admin) - (READ-ONLY)
 
-export default function EditTopic() {
-  const [search, setSearch] = useState();
-  const [topicId, setTopicId] = useState();
-  const [topicName, setTopicName] = useState();
-  const [topicDesc, setTopicDesc] = useState();
-  const [topicCreator, setTopicCreator] = useState();
+class EditTopic extends Component {
+  constructor(props) {
+    super(props);
 
-  const handleSubmit = (e) => {
+    this.state = {
+      searchForTopic: "",
+      topicName: "",
+      topicDescription: "",
+      topic: {},
+      foundTopic: false,
+    };
+  }
+
+  handleChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+
+    console.log(this.state.topicName + " " + this.state.topicDescription);
+  }
+
+  handleSearch = (e) => {
     e.preventDefault();
-    alert(
-      `topicId: ${topicId} , topicName: ${topicName} , topicDesc: ${topicDesc} , topicCreator: ${topicCreator}`
+
+    axios
+      .get(`${SERVER_HOST}/topics/topic/${this.state.searchForTopic}`)
+      .then((res) => {
+        if (res.data) {
+          if (res.data.errorMessage) {
+            console.log(res.data.errorMessage);
+          } else {
+            console.log("Records read");
+            this.setState({ topic: res.data });
+            this.setState({ foundTopic: true });
+            console.log(this.state.topic);
+          }
+        } else {
+          console.log("Record not found");
+          this.setState({ foundTopic: false });
+        }
+      });
+
+    // reset state
+    this.setState({ searchForTopic: "" });
+  };
+
+  handleEdit = (e) => {
+    e.preventDefault();
+
+    const updatedTopic = {
+      topicName: this.state.topicName,
+      topicDescription: this.state.topicDescription,
+    };
+
+    axios
+      .put(`${SERVER_HOST}/topics/topic/${this.state.topic._id}`, updatedTopic)
+      .then((res) => {
+        if (res.data) {
+          if (res.data.errorMessage) {
+            console.log(res.data.errorMessage);
+          } else {
+            console.log("Records updated");
+            this.setState({ topic: res.data });
+            alert("EDIT SUCCESSFULL");
+          }
+        } else {
+          console.log("Record not updated");
+          this.setState({ foundTopic: false });
+        }
+      });
+
+    this.setState({ topicName: "", topicDescription: "" });
+  };
+
+  render() {
+    const { classes } = this.props;
+
+    return (
+      <div className="AddTopic EditTopic">
+        <Grid container spacing={2} className={classes.grid}>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={3}
+            lg={3}
+            className="AddTopicWrapper LoginFormInfoWrapper"
+          >
+            <h3>Edit Topic</h3>
+            <FontAwesomeIcon icon={faEdit} size="4x" />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={9}
+            lg={9}
+            className="AddTopicWrapper LoginFormWrapper"
+          >
+            <Paper square className={classes.paper} elevation={5}>
+              <form onSubmit={this.handleSearch}>
+                <Grid container spacing={0} className={classes.grid}>
+                  <Grid item xs={12} sm={12} md={4} lg={4}>
+                    <label htmlFor="searchForTopic" className="formLabelsAlt">
+                      Search For Topic by id:
+                    </label>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={8} lg={8}>
+                    <input
+                      className="formInputAlt"
+                      id="searchForTopic"
+                      name="searchForTopic"
+                      type="text"
+                      value={this.state.searchForTopic}
+                      onChange={(e) => this.handleChange(e)}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
+                    <button type="submit">Search</button>
+                  </Grid>
+                </Grid>
+              </form>
+
+              {this.state.foundTopic ? (
+                <div>
+                  <h4>Record found</h4>
+                  <form onSubmit={this.handleEdit}>
+                    <Grid container spacing={0} className={classes.grid}>
+                      <Grid item xs={12} sm={12} md={4} lg={4}>
+                        <label htmlFor="topicName" className="formLabelsAlt">
+                          Edit Topic Name
+                        </label>
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={8} lg={8}>
+                        <input
+                          className="formInputAlt"
+                          id="topicName"
+                          name="topicName"
+                          type="text"
+                          placeholder={this.state.topic.topicName}
+                          value={this.state.topicName}
+                          onChange={(e) => this.handleChange(e)}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={12} md={4} lg={4}>
+                        <label htmlFor="topicDesc" className="formLabelsAlt">
+                          Edit Topic Description
+                        </label>
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={8} lg={8}>
+                        <input
+                          className="formInputAlt"
+                          id="topicDescription"
+                          name="topicDescription"
+                          type="text"
+                          placeholder={this.state.topic.topicDescription}
+                          value={this.state.topicDescription}
+                          onChange={(e) => this.handleChange(e)}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <button type="submit">Edit</button>
+                      </Grid>
+                    </Grid>
+                  </form>
+                </div>
+              ) : (
+                <h4>Search valid topic id</h4>
+              )}
+            </Paper>
+          </Grid>
+        </Grid>
+      </div>
     );
-  };
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    alert(`search: ${search}`);
-  };
-
-  const classes = useStyles();
-
-  return (
-    <div className="AddTopic EditTopic">
-      <Grid container spacing={2} className={classes.grid}>
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={3}
-          lg={3}
-          className="AddTopicWrapper LoginFormInfoWrapper"
-        >
-          <h3>Edit Topic</h3>
-          <FontAwesomeIcon icon={faEdit} size="4x" />
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={9}
-          lg={9}
-          className="AddTopicWrapper LoginFormWrapper"
-        >
-          <Paper square className={classes.paper} elevation={5}>
-            <form onSubmit={handleSearch}>
-              <Grid container spacing={0} className={classes.grid}>
-                <Grid item xs={12} sm={12} md={4} lg={4}>
-                  <label htmlFor="topicId" className="formLabelsAlt">
-                    Search For Topic
-                  </label>
-                </Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8}>
-                  <input
-                    className="formInputAlt"
-                    id="search"
-                    type="text"
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <button type="submit">Search</button>
-                </Grid>
-              </Grid>
-            </form>
-
-            <form onSubmit={handleSubmit}>
-              <Grid container spacing={0} className={classes.grid}>
-                <Grid item xs={12} sm={12} md={4} lg={4}>
-                  <label htmlFor="topicId" className="formLabelsAlt">
-                    Topic Id (Read Only)
-                  </label>
-                </Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8}>
-                  <input
-                    className="formInputAlt"
-                    id="topicId"
-                    type="text"
-                    onChange={(e) => setTopicId(e.target.value)}
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={12} md={4} lg={4}>
-                  <label htmlFor="topicId" className="formLabelsAlt">
-                    Edit Topic Name
-                  </label>
-                </Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8}>
-                  <input
-                    className="formInputAlt"
-                    id="topicName"
-                    type="text"
-                    onChange={(e) => setTopicName(e.target.value)}
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={12} md={4} lg={4}>
-                  <label htmlFor="topicDesc" className="formLabelsAlt">
-                    Edit Topic Description
-                  </label>
-                </Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8}>
-                  <input
-                    className="formInputAlt"
-                    id="topicDesc"
-                    type="text"
-                    onChange={(e) => setTopicDesc(e.target.value)}
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={12} md={4} lg={4}>
-                  <label htmlFor="topicCreator" className="formLabelsAlt">
-                    Topic Creator (Read Only)
-                  </label>
-                </Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8}>
-                  <input
-                    className="formInputAlt"
-                    id="topicCreator"
-                    type="text"
-                    onChange={(e) => setTopicCreator(e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <button type="submit">Edit</button>
-                </Grid>
-              </Grid>
-            </form>
-          </Paper>
-        </Grid>
-      </Grid>
-    </div>
-  );
+  }
 }
+
+export default withStyles(useStyles)(EditTopic);

@@ -1,3 +1,5 @@
+// GITHUB REPO - https://github.com/Brian-McK/BrianMcKenna_DesmondMadden_ConorMcGuire_SD2B
+
 // Server-side global variables
 require("dotenv").config({ path: "./config/.env" });
 

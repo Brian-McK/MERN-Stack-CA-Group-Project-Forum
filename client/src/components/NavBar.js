@@ -53,14 +53,18 @@ function NavBar() {
           <Link to="/Login">
             <Button color="inherit">Login</Button>
           </Link>}
+
+          <Link to="/Dashboard">
+              <SettingsIcon />
+          </Link>
           
-          {sessionStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?
+          {/* {sessionStorage.accessLevel >= ACCESS_LEVEL_ADMIN ?
           <Button color="inherit">
             <Link to="/Dashboard">
               <SettingsIcon />
             </Link>
           </Button>
-          :null}
+          :null} */}
         </Toolbar>
       </AppBar>
     </div>

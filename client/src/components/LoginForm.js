@@ -4,7 +4,7 @@ import React, { Component} from 'react';
 import { Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faSignInAlt, faKey, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faSignInAlt, faKey, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import {SERVER_HOST} from "../config/global_constants"
 import axios from "axios"
 import {Redirect, Link} from "react-router-dom"

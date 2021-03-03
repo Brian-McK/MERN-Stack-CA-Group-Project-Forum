@@ -25,17 +25,17 @@ router.post("/topics/topic/:id/comments", (req, res) => {
   );
 });
 
-// // find topic and update author
-// router.put("/topics/topic/:id/", (req, res) => {
-//   // get topic id
-//   const topicId = req.params.id;
-//   topicsModel.findByIdAndUpdate(
-//     topicId,
-//     { $set:{topicAuthor: "David"}},
-//     (error, data) => {
-//     res.json(data);
-//     });
-// });
+// find topic and update author
+router.put("/topics/topic/:id/", (req, res) => {
+  // get topic id
+  const topicId = req.params.id;
+  topicsModel.findByIdAndUpdate(
+    topicId,
+    { $set: req.body},
+    (error, data) => {
+    res.json(data);
+    });
+});
 
 // Read one record
 // router.get("/topics/topic/:id/comments", (req, res) => {
